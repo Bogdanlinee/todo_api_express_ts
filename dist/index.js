@@ -24,25 +24,58 @@ const memoryDB = {
         }
     ]
 };
-app.use(express_1.default.static('public'));
+app.use(express_1.default.static('../public'));
 app.use(express_1.default.json());
+// get all items
 app.get('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json(memoryDB);
 }));
+// create one item
 app.post('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { text } = req.body;
-    const checked = false;
     if (!text) {
-        res.json({ sussess: false });
+        res.json({ 'ok': false });
     }
-    const id = memoryDB.items.reduce((acc, item) => {
+    const id = 1 + memoryDB.items.reduce((acc, item) => {
         if (item.id > acc) {
             acc = item.id;
         }
         return acc;
-    }, -Infinity);
-    memoryDB.items.push({ text, id, checked });
+    }, 0);
+    memoryDB.items.push({ text, id, checked: false });
     res.json({ id });
+}));
+// update one item
+app.put('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { text, id, checked } = req.body;
+    if (!text || !id || !checked) {
+        return res.json({ 'ok': false });
+    }
+    const doesIdExist = memoryDB.items.find((item, index) => {
+        if (item.id === id) {
+            memoryDB.items[index].text = text;
+            memoryDB.items[index].checked = checked;
+            return item.id === id;
+        }
+    });
+    if (!doesIdExist) {
+        return res.json({ 'ok': false });
+    }
+    res.json({ 'ok': true });
+}));
+// delete one item
+app.delete('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.body;
+    if (!id) {
+        return res.json({ 'ok': false });
+    }
+    const doesIdExist = memoryDB.items.find((item, index) => {
+        if (item.id === id) {
+            memoryDB.items.splice(index, 1);
+            return item.id === id;
+        }
+    });
+    res.json({ 'ok': true });
 }));
 app.listen(port, () => {
     console.log('server is running');

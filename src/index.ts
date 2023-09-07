@@ -24,32 +24,74 @@ const memoryDB: MemoryDB = {
   ]
 };
 
-app.use(express.static('public'));
+app.use(express.static('../public'));
 app.use(express.json());
 
+// get all items
 app.get('/api/v1/items', async (req, res) => {
   res.json(memoryDB);
 });
 
+// create one item
 app.post('/api/v1/items', async (req, res) => {
-  const { text }: { text: string } = req.body;
-  const checked: boolean = false;
+  const { text }: DBvalues = req.body;
 
   if (!text) {
-    res.json({ sussess: false });
+    res.json({ 'ok': false });
   }
 
-  const id: number = memoryDB.items.reduce((acc, item): number => {
+  const id: number = 1 + memoryDB.items.reduce((acc: number, item: DBvalues): number => {
     if (item.id > acc) {
       acc = item.id;
     }
     return acc;
-  }, -Infinity);
+  }, 0);
 
-
-  memoryDB.items.push({ text, id, checked })
+  memoryDB.items.push({ text, id, checked: false })
 
   res.json({ id });
+});
+
+// update one item
+app.put('/api/v1/items', async (req, res) => {
+  const { text, id, checked }: DBvalues = req.body;
+
+  if (!text || !id || !checked) {
+    return res.json({ 'ok': false });
+  }
+
+  const doesIdExist: DBvalues | undefined = memoryDB.items.find((item: DBvalues, index: number) => {
+    if (item.id === id) {
+      memoryDB.items[index].text = text;
+      memoryDB.items[index].checked = checked;
+      return item.id === id;
+    }
+  });
+
+
+  if (!doesIdExist) {
+    return res.json({ 'ok': false });
+  }
+
+  res.json({ 'ok': true });
+});
+
+// delete one item
+app.delete('/api/v1/items', async (req, res) => {
+  const { id }: DBvalues = req.body;
+
+  if (!id) {
+    return res.json({ 'ok': false });
+  }
+
+  const doesIdExist: DBvalues | undefined = memoryDB.items.find((item: DBvalues, index: number) => {
+    if (item.id === id) {
+      memoryDB.items.splice(index, 1);
+      return item.id === id;
+    }
+  });
+
+  res.json({ 'ok': true });
 });
 
 app.listen(port, () => {
