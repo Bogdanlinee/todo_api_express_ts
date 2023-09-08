@@ -24,7 +24,7 @@ const memoryDB: MemoryDB = {
   ]
 };
 
-app.use(express.static('../public'));
+app.use(express.static('public'));
 app.use(express.json());
 
 // get all items
@@ -37,7 +37,7 @@ app.post('/api/v1/items', async (req, res) => {
   const { text }: DBvalues = req.body;
 
   if (!text) {
-    res.json({ 'ok': false });
+    return res.status(500).json({ 'ok': false });
   }
 
   const id: number = 1 + memoryDB.items.reduce((acc: number, item: DBvalues): number => {
@@ -56,8 +56,8 @@ app.post('/api/v1/items', async (req, res) => {
 app.put('/api/v1/items', async (req, res) => {
   const { text, id, checked }: DBvalues = req.body;
 
-  if (!text || !id || !checked) {
-    return res.json({ 'ok': false });
+  if (!text || !id || checked === undefined) {
+    return res.status(500).json({ 'ok': false });
   }
 
   const doesIdExist: DBvalues | undefined = memoryDB.items.find((item: DBvalues, index: number) => {
@@ -70,7 +70,7 @@ app.put('/api/v1/items', async (req, res) => {
 
 
   if (!doesIdExist) {
-    return res.json({ 'ok': false });
+    return res.status(500).json({ 'ok': false });
   }
 
   res.json({ 'ok': true });
@@ -81,7 +81,7 @@ app.delete('/api/v1/items', async (req, res) => {
   const { id }: DBvalues = req.body;
 
   if (!id) {
-    return res.json({ 'ok': false });
+    return res.status(500).json({ 'ok': false });
   }
 
   const doesIdExist: DBvalues | undefined = memoryDB.items.find((item: DBvalues, index: number) => {

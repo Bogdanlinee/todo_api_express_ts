@@ -24,7 +24,7 @@ const memoryDB = {
         }
     ]
 };
-app.use(express_1.default.static('../public'));
+app.use(express_1.default.static('public'));
 app.use(express_1.default.json());
 // get all items
 app.get('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -34,7 +34,7 @@ app.get('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, functio
 app.post('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { text } = req.body;
     if (!text) {
-        res.json({ 'ok': false });
+        return res.status(500).json({ 'ok': false });
     }
     const id = 1 + memoryDB.items.reduce((acc, item) => {
         if (item.id > acc) {
@@ -48,8 +48,8 @@ app.post('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, functi
 // update one item
 app.put('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { text, id, checked } = req.body;
-    if (!text || !id || !checked) {
-        return res.json({ 'ok': false });
+    if (!text || !id || checked === undefined) {
+        return res.status(500).json({ 'ok': false });
     }
     const doesIdExist = memoryDB.items.find((item, index) => {
         if (item.id === id) {
@@ -59,7 +59,7 @@ app.put('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, functio
         }
     });
     if (!doesIdExist) {
-        return res.json({ 'ok': false });
+        return res.status(500).json({ 'ok': false });
     }
     res.json({ 'ok': true });
 }));
@@ -67,7 +67,7 @@ app.put('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, functio
 app.delete('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.body;
     if (!id) {
-        return res.json({ 'ok': false });
+        return res.status(500).json({ 'ok': false });
     }
     const doesIdExist = memoryDB.items.find((item, index) => {
         if (item.id === id) {
