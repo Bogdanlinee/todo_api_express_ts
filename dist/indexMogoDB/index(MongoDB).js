@@ -15,61 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const Tasks_1 = require("./models/Tasks");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 5000;
+// app routes
+const tasksRoutes_1 = __importDefault(require("./routes/tasksRoutes"));
 app.use(express_1.default.static('public'));
 app.use(express_1.default.json());
-// get all items
-app.get('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const items = yield Tasks_1.Task.find();
-        res.json({ items });
-    }
-    catch (error) {
-        res.status(500).json({ 'ok': false });
-    }
-}));
-// create one item
-app.post('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { text } = req.body;
-        const item = yield Tasks_1.Task.create({ text });
-        res.json({ id: item.id });
-    }
-    catch (error) {
-        res.status(500).json({ 'ok': false });
-    }
-}));
-// update one item
-app.put('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { text, id, checked } = req.body;
-        const result = yield Tasks_1.Task.findOneAndUpdate({ id }, { text, checked }, { returnDocument: 'after' });
-        if (!result) {
-            return res.json({ 'ok': false });
-        }
-        res.json({ 'ok': true });
-    }
-    catch (error) {
-        res.status(500).json({ 'ok': false });
-    }
-}));
-// delete one item
-app.delete('/api/v1/items', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.body;
-        const result = yield Tasks_1.Task.findOneAndDelete({ id });
-        if (!result) {
-            return res.json({ 'ok': false });
-        }
-        res.json({ 'ok': true });
-    }
-    catch (error) {
-        res.status(500).json({ 'ok': false });
-    }
-}));
+// tasks router
+app.use('/api/v1/items', tasksRoutes_1.default);
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         try {
