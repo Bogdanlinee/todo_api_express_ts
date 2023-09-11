@@ -6,12 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rd /s /q dist && tsc -w",
-    "start": "nodemon --inspect dist/index(jsonDB).js"
+    "start": "nodemon --inspect dist/indexMogoDB/index(MongoDB).js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.5.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",

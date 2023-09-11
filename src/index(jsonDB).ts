@@ -1,7 +1,6 @@
 import express from 'express';
 import fs from 'fs/promises';
 import path, { basename, dirname } from 'path';
-import { json } from 'stream/consumers';
 
 const app = express();
 const port = 5000;
@@ -98,6 +97,7 @@ app.delete('/api/v1/items', async (req, res) => {
     if (!id) {
       return res.status(500).json({ 'ok': false });
     }
+
     const fileDB: string = await fs.readFile(jsonDBName, 'utf-8');
     const fileData: MemoryDB = JSON.parse(fileDB);
     const doesIdExist: DBvalues | undefined = fileData.items.find((item: DBvalues, index: number) => {
