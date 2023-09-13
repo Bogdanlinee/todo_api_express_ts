@@ -1,7 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
-
 import morgan from 'morgan';
 
 dotenv.config();

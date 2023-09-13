@@ -15,19 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const express_session_1 = __importDefault(require("express-session"));
-const session_file_store_1 = __importDefault(require("session-file-store"));
 const morgan_1 = __importDefault(require("morgan"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 5000;
-const FileStore = (0, session_file_store_1.default)(express_session_1.default);
-app.use((0, express_session_1.default)({
-    store: new FileStore({}),
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true,
-}));
 // app routes
 const tasksRoutes_1 = __importDefault(require("./routes/tasksRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
