@@ -4,7 +4,7 @@ const login = async (req: Request, res: Response) => {
   try {
     res.json({ ok: true });
   } catch (error) {
-    res.json({ ok: false });
+    res.json({ error });
   }
 }
 
@@ -12,7 +12,7 @@ const register = async (req: Request, res: Response) => {
   try {
     res.json({ ok: true });
   } catch (error) {
-    res.json({ ok: false });
+    res.json({ error });
   }
 }
 
@@ -22,7 +22,7 @@ const logout = async (req: Request, res: Response) => {
     res.clearCookie('connect.sid');
     res.json({ ok: true });
   } catch (error) {
-    res.json({ ok: false });
+    res.json({ error });
   }
 }
 
