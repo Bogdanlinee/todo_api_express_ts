@@ -105,6 +105,10 @@ const logout = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
   try {
+    const { login, pass }: { login: string, pass: string } = req.body;
+    if (!login || !pass) {
+      return res.status(400).json({ error: 'Provide credentials, please.' });
+    }
     res.json({ ok: true });
   } catch (error) {
     res.json({ error });
@@ -113,6 +117,10 @@ const login = async (req: Request, res: Response) => {
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { login, pass }: { login: string, pass: string } = req.body;
+    if (!login || !pass) {
+      return res.status(400).json({ error: 'Provide credentials, please.' });
+    }
     res.json({ ok: true });
   } catch (error) {
     res.json({ error });
