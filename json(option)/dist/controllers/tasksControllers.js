@@ -17,8 +17,7 @@ const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
 const async_1 = __importDefault(require("async"));
 const jsonDBName = path_1.default.join(path_1.default.resolve(), 'db/db.json');
-const queue = async_1.default.queue((task, completed) => __awaiter(void 0, void 0, void 0, function* () {
-    const remaining = queue.length();
+const queue = async_1.default.queue((text, completed) => __awaiter(void 0, void 0, void 0, function* () {
     const fileDB = yield promises_1.default.readFile(jsonDBName, 'utf-8');
     const fileData = JSON.parse(fileDB);
     const id = 1 + fileData.items.reduce((acc, item) => {
@@ -27,9 +26,9 @@ const queue = async_1.default.queue((task, completed) => __awaiter(void 0, void 
         }
         return acc;
     }, 0);
-    fileData.items.push({ text: 'text', id, checked: false });
+    fileData.items.push({ text, id, checked: false });
     promises_1.default.writeFile(jsonDBName, JSON.stringify(fileData, null, 2));
-    completed(null, { task, remaining, id });
+    completed(null, id);
 }), 1);
 const getAllTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -47,9 +46,10 @@ const createOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (!text) {
             return res.status(400).json({ error: 'Provide task title, please' });
         }
-        queue.push('task', (error, { task, remaining, id }) => {
+        queue.push(text, (error, id) => {
+            console.log(id);
             if (error) {
-                console.log(`An error occurred while processing task ${task}`);
+                res.status(500).json({ error });
             }
             else {
                 res.json({ id });

@@ -1,7 +1,7 @@
 import express from "express";
 import { logout, register, login } from '../controllers/authControllers';
-// import sessionConfig from '../utils/sessionConfig';
-// import session from 'express-session';
+import sessionConfig from '../utils/sessionConfig';
+import session from 'express-session';
 
 const router = express.Router();
 

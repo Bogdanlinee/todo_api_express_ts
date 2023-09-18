@@ -14,8 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const morgan_1 = __importDefault(require("morgan"));
+const mongodb_1 = require("mongodb");
+// import { connect } from './db/db';
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 5000;
@@ -38,7 +39,12 @@ app.all('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (process.env.MONGO_URI) {
-                yield mongoose_1.default.connect(process.env.MONGO_URI);
+                // await mongoose.connect(process.env.MONGO_URI);
+                const url = 'mongodb+srv://danBerezin:danBerezin123!@cluster0.yt4biys.mongodb.net/test?retryWrites=true&w=majority"';
+                const dafaultDbName = 'test';
+                const client = new mongodb_1.MongoClient(url);
+                yield client.connect();
+                console.log(yield client.db().collection('test.tasks').find({}));
                 app.listen(port, () => console.log('server is running'));
             }
         }

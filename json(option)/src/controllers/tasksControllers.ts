@@ -15,8 +15,7 @@ interface MemoryDB {
 
 const jsonDBName: string = path.join(path.resolve(), 'db/db.json');
 
-const queue = async.queue(async (task, completed) => {
-  const remaining = queue.length();
+const queue = async.queue(async (text: string, completed) => {
   const fileDB: string = await fs.readFile(jsonDBName, 'utf-8');
   const fileData: MemoryDB = JSON.parse(fileDB);
 
@@ -27,9 +26,9 @@ const queue = async.queue(async (task, completed) => {
     return acc;
   }, 0);
 
-  fileData.items.push({ text: 'text', id, checked: false });
+  fileData.items.push({ text, id, checked: false });
   fs.writeFile(jsonDBName, JSON.stringify(fileData, null, 2));
-  completed(null, { task, remaining, id });
+  completed(null, id)
 }, 1);
 
 const getAllTasks = async (req: Request, res: Response) => {
@@ -49,15 +48,14 @@ const createOneTask = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Provide task title, please' });
     }
 
-    queue.push('task', (error, { task, remaining, id }) => {
+    queue.push(text, (error, id) => {
+      console.log(id);
       if (error) {
-        console.log(`An error occurred while processing task ${task}`);
+        res.status(500).json({ error });
       } else {
         res.json({ id });
       }
-    })
-
-
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });

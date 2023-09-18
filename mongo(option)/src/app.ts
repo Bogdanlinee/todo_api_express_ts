@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv'
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import { MongoClient } from 'mongodb';
+// import { connect } from './db/db';
 
 dotenv.config();
 
@@ -29,7 +31,14 @@ app.all('*', async (req, res) => {
 (async function () {
   try {
     if (process.env.MONGO_URI) {
-      await mongoose.connect(process.env.MONGO_URI);
+      // await mongoose.connect(process.env.MONGO_URI);
+      const url = 'mongodb+srv://danBerezin:danBerezin123!@cluster0.yt4biys.mongodb.net/test?retryWrites=true&w=majority"';
+      const dafaultDbName = 'test';
+      const client = new MongoClient(url);
+      await client.connect();
+      console.log(await client.db().collection('test.tasks').find({}))
+
+
       app.listen(port, () => console.log('server is running'));
     }
   } catch (error) {
