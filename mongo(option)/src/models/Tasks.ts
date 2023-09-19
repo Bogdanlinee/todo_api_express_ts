@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 interface TaskInterface {
   text: string,
   checked: boolean,
-  // id: string,
+  id?: string,
+  _id?: string
 }
 
 // const taskSchema = new mongoose.Schema<TaskInterface>({
