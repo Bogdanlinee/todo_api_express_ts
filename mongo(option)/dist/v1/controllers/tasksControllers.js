@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOneTask = exports.updateOneTask = exports.createOneTask = exports.getAllTasks = void 0;
-const Tasks_1 = require("../../models/Tasks");
+const db_1 = require("../../db/db");
 const getAllTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const items = yield Tasks_1.Task.find();
+        const items = yield db_1.db.collection('tasks').find({}).toArray();
         res.json({ items });
     }
     catch (error) {
@@ -23,11 +23,18 @@ const getAllTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getAllTasks = getAllTasks;
 const createOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { text } = req.body;
-        const item = yield Tasks_1.Task.create({ text });
-        if (!text) {
+        let { text, checked } = req.body;
+        if (!text.trim()) {
+            return res.status(400).json({ error: 'Can not create new task.' });
         }
-        res.json({ id: item.id });
+        if (!checked) {
+            checked = false;
+        }
+        else {
+            checked = true;
+        }
+        const item = yield db_1.db.collection('tasks').insertOne({ text, checked });
+        res.json({ id: item.insertedId.toString() });
     }
     catch (error) {
         res.status(500).json({ error });
@@ -35,33 +42,35 @@ const createOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createOneTask = createOneTask;
 const updateOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { text, id, checked } = req.body;
-        const result = yield Tasks_1.Task.findOneAndUpdate({ id }, { text, checked }, {
-            returnDocument: 'after',
-            runValidators: true
-        });
-        if (!result) {
-            return res.status(400).json({ error: 'No task found.' });
-        }
-        res.json({ 'ok': true });
-    }
-    catch (error) {
-        res.status(500).json({ error });
-    }
+    // try {
+    //   const { text, id, checked }: TaskInterface = req.body;
+    //   const result: TaskInterface | null = await Task.findOneAndUpdate(
+    //     { id },
+    //     { text, checked },
+    //     {
+    //       returnDocument: 'after',
+    //       runValidators: true
+    //     }
+    //   );
+    //   if (!result) {
+    //     return res.status(400).json({ error: 'No task found.' });
+    //   }
+    //   res.json({ 'ok': true });
+    // } catch (error) {
+    //   res.status(500).json({ error });
+    // }
 });
 exports.updateOneTask = updateOneTask;
 const deleteOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.body;
-        const result = yield Tasks_1.Task.findOneAndDelete({ id });
-        if (!result) {
-            return res.status(400).json({ error: 'No task found.' });
-        }
-        res.json({ 'ok': true });
-    }
-    catch (error) {
-        res.status(500).json({ error });
-    }
+    // try {
+    //   const { id }: TaskInterface = req.body;
+    //   const result: TaskInterface | null = await Task.findOneAndDelete({ id });
+    //   if (!result) {
+    //     return res.status(400).json({ error: 'No task found.' });
+    //   }
+    //   res.json({ 'ok': true });
+    // } catch (error) {
+    //   res.status(500).json({ error });
+    // }
 });
 exports.deleteOneTask = deleteOneTask;

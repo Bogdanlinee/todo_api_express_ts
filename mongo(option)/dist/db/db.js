@@ -11,12 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect = exports.db = void 0;
 const mongodb_1 = require("mongodb");
-const url = 'mongodb+srv://danBerezin:danBerezin123!@cluster0.yt4biys.mongodb.net/test?retryWrites=true&w=majority"';
-const dafaultDbName = 'test';
-const client = new mongodb_1.MongoClient(url);
-const connect = (dbName = dafaultDbName) => __awaiter(void 0, void 0, void 0, function* () {
-    const conn = yield client.connect();
-    exports.db = conn.db(dbName);
-    return client;
+const connect = (url) => __awaiter(void 0, void 0, void 0, function* () {
+    const client = new mongodb_1.MongoClient(url);
+    yield client.connect();
+    exports.db = client.db('test');
 });
 exports.connect = connect;

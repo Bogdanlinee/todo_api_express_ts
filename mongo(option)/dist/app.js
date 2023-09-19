@@ -14,9 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+// import mongoose from 'mongoose';
 const morgan_1 = __importDefault(require("morgan"));
-const mongodb_1 = require("mongodb");
-// import { connect } from './db/db';
+// import { MongoClient } from 'mongodb';
+const db_1 = require("./db/db");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 5000;
@@ -40,12 +41,11 @@ app.all('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             if (process.env.MONGO_URI) {
                 // await mongoose.connect(process.env.MONGO_URI);
-                const url = 'mongodb+srv://danBerezin:danBerezin123!@cluster0.yt4biys.mongodb.net/test?retryWrites=true&w=majority"';
-                const dafaultDbName = 'test';
-                const client = new mongodb_1.MongoClient(url);
-                yield client.connect();
-                console.log(yield client.db().collection('test.tasks').find({}));
+                yield (0, db_1.connect)(process.env.MONGO_URI);
                 app.listen(port, () => console.log('server is running'));
+            }
+            else {
+                throw Error('No connection to database');
             }
         }
         catch (error) {
