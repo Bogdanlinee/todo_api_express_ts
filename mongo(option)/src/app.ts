@@ -1,8 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv'
-// import mongoose from 'mongoose';
 import morgan from 'morgan';
-// import { MongoClient } from 'mongodb';
 import { connect } from './db/db';
 
 dotenv.config();
@@ -31,7 +29,6 @@ app.all('*', async (req, res) => {
 (async function () {
   try {
     if (process.env.MONGO_URI) {
-      // await mongoose.connect(process.env.MONGO_URI);
       await connect(process.env.MONGO_URI);
       app.listen(port, () => console.log('server is running'));
     } else {
