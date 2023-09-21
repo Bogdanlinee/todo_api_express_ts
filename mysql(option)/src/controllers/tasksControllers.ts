@@ -1,15 +1,30 @@
 import { TaskInterface } from '../../models/Tasks';
 import { Request, Response } from 'express';
-import { WithId, InsertOneResult, ObjectId } from 'mongodb'
-import { db } from '../../db/db';
+import { db } from '../db/db';
+import { parse } from 'path';
 
 const getAllTasks = async (req: Request, res: Response) => {
+  const getData = async () => {
+    await db.query('SELECT * FROM tasks', (err, result, field) => {
+      // JSON.parse(JSON.stringify(result));
+    });
+    return 'lol';
+  }
+
   try {
+    return res.json({
+      items: [
+        {
+          id: 22,
+          text: "First Task",
+          checked: true
+        }
+      ]
+    });
     const items: WithId<TaskInterface>[] = await db.collection<TaskInterface>('tasks').find({}).toArray();
     items.map(item => {
       item.id = item._id.toString();
     })
-    res.json({ items });
   } catch (error) {
     res.status(500).json({ error });
   }
