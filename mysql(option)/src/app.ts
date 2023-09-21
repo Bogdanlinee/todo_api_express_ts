@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import morgan from 'morgan';
-import { connect,db } from './db/db';
+import { connect, db } from './db/db';
 
 dotenv.config();
 
