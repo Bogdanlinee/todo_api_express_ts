@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = exports.logout = void 0;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('login');
     try {
         const { login, pass } = req.body;
         if (!login || !pass) {
@@ -24,6 +25,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.login = login;
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('logout');
     try {
         const { login, pass } = req.body;
         if (!login || !pass) {
@@ -32,6 +34,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ ok: true });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ error });
     }
 });

@@ -1,8 +1,6 @@
 
 import { TaskInterface } from '../models/Tasks';
 import { Request, Response } from 'express';
-import { db } from '../db/db';
-import { MysqlError, } from 'mysql';
 import { selectAllQuery, insertOneQuery, updateOneQuery, deleteOneQuery } from '../db/dbQueries';
 
 const getAllTasks = async (req: Request, res: Response) => {

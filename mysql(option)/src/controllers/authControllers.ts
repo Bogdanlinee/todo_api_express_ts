@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 const login = async (req: Request, res: Response) => {
+  console.log('login')
   try {
     const { login, pass }: { login: string, pass: string } = req.body;
     if (!login || !pass) {
@@ -13,6 +14,7 @@ const login = async (req: Request, res: Response) => {
 }
 
 const register = async (req: Request, res: Response) => {
+  console.log('logout')
   try {
     const { login, pass }: { login: string, pass: string } = req.body;
     if (!login || !pass) {
@@ -20,6 +22,7 @@ const register = async (req: Request, res: Response) => {
     }
     res.json({ ok: true });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error });
   }
 }
