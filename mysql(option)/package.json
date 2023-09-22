@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf ./dist && tsc -w",
-    "start": "nodemon dist/app.js"
+    "start": "nodemon --ignore ./sessions  dist/app.js"
   },
   "author": "",
   "license": "ISC",
