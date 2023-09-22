@@ -10,10 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOneTask = exports.updateOneTask = exports.createOneTask = exports.getAllTasks = void 0;
-const dbQueries_1 = require("../db/dbQueries");
+const db_1 = require("../db/db");
 const getAllTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const getData = () => __awaiter(void 0, void 0, void 0, function* () {
+        yield db_1.db.query('SELECT * FROM tasks', (err, result, field) => {
+            // JSON.parse(JSON.stringify(result));
+        });
+        return 'lol';
+    });
     try {
         return res.json({
+
             items: yield (0, dbQueries_1.selectAllQuery)()
         });
     }
@@ -55,6 +62,7 @@ const updateOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             checked = true;
         }
         yield (0, dbQueries_1.updateOneQuery)(text, id, checked);
+
         res.json({ 'ok': true });
     }
     catch (error) {
@@ -68,7 +76,9 @@ const deleteOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (!id) {
             return res.status(400).json({ error: 'Can not create new task.' });
         }
+
         yield (0, dbQueries_1.deleteOneQuery)(id);
+
         res.json({ 'ok': true });
     }
     catch (error) {

@@ -35,9 +35,9 @@ app.all('*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            app.listen(port, () => console.log('server is running'));
             if (process.env.MYSQL_CONNECTION) {
                 (0, db_1.connect)(process.env.MYSQL_CONNECTION);
+                app.listen(port, () => console.log('server is running'));
             }
             else {
                 throw Error('No connection to database');

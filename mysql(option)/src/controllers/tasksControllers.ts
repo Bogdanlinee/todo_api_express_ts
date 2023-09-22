@@ -1,3 +1,4 @@
+
 import { TaskInterface } from '../models/Tasks';
 import { Request, Response } from 'express';
 import { db } from '../db/db';
@@ -72,5 +73,6 @@ const deleteOneTask = async (req: Request, res: Response) => {
     res.status(500).json({ error });
   }
 }
+
 
 export { getAllTasks, createOneTask, updateOneTask, deleteOneTask }
