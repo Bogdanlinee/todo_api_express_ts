@@ -26,9 +26,9 @@ app.all('*', async (req, res) => {
 
 (async function () {
   try {
+    app.listen(port, () => console.log('server is running'));
     if (process.env.MYSQL_CONNECTION) {
       connect(process.env.MYSQL_CONNECTION);
-      app.listen(port, () => console.log('server is running'));
     } else {
       throw Error('No connection to database');
     }

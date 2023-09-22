@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rd /s /q dist && tsc -w",
-    "start": "nodemon --inspect dist/app.js"
+    "build": "rm -rf ./dist && tsc -w",
+    "start": "nodemon dist/app.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,8 +1,7 @@
 interface TaskInterface {
   text: string,
   checked: boolean,
-  id?: string,
-  _id?: string
+  id?: number,
 }
 
 export { TaskInterface };

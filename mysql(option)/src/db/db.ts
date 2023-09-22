@@ -1,8 +1,10 @@
-import mysql from 'mysql';
 
-export let db;
+import mysql, { Connection } from 'mysql';
 
-export const connect = async (credentials) => {
+export let db: Connection;
+
+export const connect = async (credentials: string) => {
   db = mysql.createConnection(JSON.parse(credentials));
   db.connect();
+
 }
