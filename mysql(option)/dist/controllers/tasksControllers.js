@@ -10,15 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOneTask = exports.updateOneTask = exports.createOneTask = exports.getAllTasks = void 0;
-const mongodb_1 = require("mongodb");
-const db_1 = require("../../db/db");
+const dbQueries_1 = require("../db/dbQueries");
 const getAllTasks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const items = yield db_1.db.collection('tasks').find({}).toArray();
-        items.map(item => {
-            item.id = item._id.toString();
+        return res.json({
+            items: yield (0, dbQueries_1.selectAllQuery)()
         });
-        res.json({ items });
     }
     catch (error) {
         res.status(500).json({ error });
@@ -28,7 +25,7 @@ exports.getAllTasks = getAllTasks;
 const createOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { text, checked } = req.body;
-        if (!text.trim()) {
+        if (!text) {
             return res.status(400).json({ error: 'Can not create new task.' });
         }
         if (!checked) {
@@ -37,8 +34,8 @@ const createOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         else {
             checked = true;
         }
-        const item = yield db_1.db.collection('tasks').insertOne({ text, checked });
-        res.json({ id: item.insertedId.toString() });
+        const itemId = yield (0, dbQueries_1.insertOneQuery)(text, checked);
+        res.json({ id: itemId });
     }
     catch (error) {
         res.status(500).json({ error });
@@ -48,7 +45,7 @@ exports.createOneTask = createOneTask;
 const updateOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let { text, id, checked } = req.body;
-        if (!text.trim() || !(id === null || id === void 0 ? void 0 : id.trim())) {
+        if (!text || !id) {
             return res.status(400).json({ error: 'Can not create new task.' });
         }
         if (!checked) {
@@ -57,16 +54,10 @@ const updateOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         else {
             checked = true;
         }
-        yield db_1.db.collection('tasks').findOneAndUpdate({ _id: new mongodb_1.ObjectId(id) }, {
-            '$set': {
-                text,
-                checked
-            }
-        });
+        yield (0, dbQueries_1.updateOneQuery)(text, id, checked);
         res.json({ 'ok': true });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ error });
     }
 });
@@ -74,10 +65,10 @@ exports.updateOneTask = updateOneTask;
 const deleteOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.body;
-        if (!(id === null || id === void 0 ? void 0 : id.trim())) {
+        if (!id) {
             return res.status(400).json({ error: 'Can not create new task.' });
         }
-        yield db_1.db.collection('tasks').findOneAndDelete({ _id: new mongodb_1.ObjectId(id) });
+        yield (0, dbQueries_1.deleteOneQuery)(id);
         res.json({ 'ok': true });
     }
     catch (error) {

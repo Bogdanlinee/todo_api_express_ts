@@ -1,24 +1,24 @@
-import { TaskInterface } from '../../models/Tasks';
+import { TaskInterface } from '../models/Tasks';
 import { Request, Response } from 'express';
-import { WithId, InsertOneResult, ObjectId } from 'mongodb'
-import { db } from '../../db/db';
+import { db } from '../db/db';
+import { MysqlError, } from 'mysql';
+import { selectAllQuery, insertOneQuery, updateOneQuery, deleteOneQuery } from '../db/dbQueries';
 
 const getAllTasks = async (req: Request, res: Response) => {
   try {
-    const items: WithId<TaskInterface>[] = await db.collection<TaskInterface>('tasks').find({}).toArray();
-    items.map(item => {
-      item.id = item._id.toString();
-    })
-    res.json({ items });
+    return res.json({
+      items: await selectAllQuery()
+    });
   } catch (error) {
     res.status(500).json({ error });
   }
 }
+
 const createOneTask = async (req: Request, res: Response) => {
   try {
     let { text, checked }: TaskInterface = req.body;
 
-    if (!text.trim()) {
+    if (!text) {
       return res.status(400).json({ error: 'Can not create new task.' });
     }
 
@@ -28,9 +28,9 @@ const createOneTask = async (req: Request, res: Response) => {
       checked = true;
     }
 
-    const item: InsertOneResult<TaskInterface> = await db.collection<TaskInterface>('tasks').insertOne({ text, checked });
+    const itemId = await insertOneQuery(text, checked);
 
-    res.json({ id: item.insertedId.toString() });
+    res.json({ id: itemId });
   } catch (error) {
     res.status(500).json({ error });
   }
@@ -40,7 +40,7 @@ const updateOneTask = async (req: Request, res: Response) => {
   try {
     let { text, id, checked }: TaskInterface = req.body;
 
-    if (!text.trim() || !id?.trim()) {
+    if (!text || !id) {
       return res.status(400).json({ error: 'Can not create new task.' });
     }
 
@@ -50,19 +50,10 @@ const updateOneTask = async (req: Request, res: Response) => {
       checked = true;
     }
 
-    await db.collection('tasks').findOneAndUpdate(
-      { _id: new ObjectId(id) },
-      {
-        '$set': {
-          text,
-          checked
-        }
-      }
-    );
+    await updateOneQuery(text, id, checked);
 
     res.json({ 'ok': true });
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error });
   }
 }
@@ -71,12 +62,11 @@ const deleteOneTask = async (req: Request, res: Response) => {
   try {
     const { id }: TaskInterface = req.body;
 
-    if (!id?.trim()) {
+    if (!id) {
       return res.status(400).json({ error: 'Can not create new task.' });
     }
 
-    await db.collection('tasks').findOneAndDelete({ _id: new ObjectId(id) });
-
+    await deleteOneQuery(id);
     res.json({ 'ok': true });
   } catch (error) {
     res.status(500).json({ error });
