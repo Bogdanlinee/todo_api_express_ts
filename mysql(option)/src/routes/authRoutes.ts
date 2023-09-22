@@ -3,8 +3,6 @@ import { logout, register, login } from '../controllers/authControllers';
 import sessionConfig from '../utils/sessionConfig';
 import session from 'express-session';
 
-console.log('hello')
-
 const router = express.Router();
 
 router.post('/logout', session(sessionConfig), logout);
