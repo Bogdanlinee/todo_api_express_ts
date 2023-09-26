@@ -38,6 +38,7 @@ const createOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.json({ id: itemId });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ error });
     }
 });
@@ -65,6 +66,7 @@ exports.updateOneTask = updateOneTask;
 const deleteOneTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.body;
+        console.log(id);
         if (!id) {
             return res.status(400).json({ error: 'Can not create new task.' });
         }
