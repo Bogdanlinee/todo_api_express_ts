@@ -8,15 +8,15 @@ dotenv.config();
 
 const app = express();
 const port = 5000;
+const corsSettings = { origin: 'http://localhost:8080', credentials: true }
 
 // app routes
 import tasksRouter from './routes/tasksRoutes';
 import authRouter from './routes/authRoutes';
 
-app.use(cors({ origin: 'localhost:8080/' }))
+app.use(cors(corsSettings));
 app.use(morgan('tiny'));
-// serving static on another port
-// app.use(express.static('public'));
+app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
 

@@ -1,8 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 
 const app = express();
 const port = 5000;
+const corsSettings = { origin: 'http://localhost:8080', credentials: true }
 
+app.use(cors(corsSettings));
 import tasksRouter from './routes/tasksRouter';
 import authRouter from './routes/authRouter';
 

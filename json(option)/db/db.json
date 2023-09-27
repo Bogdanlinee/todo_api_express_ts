@@ -1,3 +1,14 @@
 {
-  "items": []
+  "items": [
+    {
+      "text": "First task",
+      "id": 1,
+      "checked": true
+    },
+    {
+      "text": "Fourth file",
+      "id": 2,
+      "checked": true
+    }
+  ]
 }
