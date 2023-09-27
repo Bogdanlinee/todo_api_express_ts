@@ -2,17 +2,20 @@ import express from 'express';
 import dotenv from 'dotenv'
 import morgan from 'morgan';
 import { connect } from './db/db';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const port = 5000;
+const corsSettings = { origin: 'http://localhost:8080', credentials: true }
 
 // app routes
 import tasksRouterV1 from './v1/routes/tasksRoutes';
 import authRouterV1 from './v1/routes/authRoutes';
 import tasksRouterV2 from './v2/routes/router';
 
+app.use(cors(corsSettings));
 app.use(morgan('tiny'));
 app.use(express.static('public'));
 app.use(express.json());

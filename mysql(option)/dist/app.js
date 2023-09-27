@@ -20,13 +20,13 @@ const cors_1 = __importDefault(require("cors"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = 5000;
+const corsSettings = { origin: 'http://localhost:8080', credentials: true };
 // app routes
 const tasksRoutes_1 = __importDefault(require("./routes/tasksRoutes"));
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
-app.use((0, cors_1.default)({ origin: 'localhost:8080/' }));
+app.use((0, cors_1.default)(corsSettings));
 app.use((0, morgan_1.default)('tiny'));
-// serving static on another port
-// app.use(express.static('public'));
+app.use(express_1.default.static('public'));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
 // tasks router
