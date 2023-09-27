@@ -31,6 +31,7 @@ const createOneTask = async (req: Request, res: Response) => {
 
     res.json({ id: itemId });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error });
   }
 }
@@ -60,6 +61,8 @@ const updateOneTask = async (req: Request, res: Response) => {
 const deleteOneTask = async (req: Request, res: Response) => {
   try {
     const { id }: TaskInterface = req.body;
+
+    console.log(id)
 
     if (!id) {
       return res.status(400).json({ error: 'Can not create new task.' });

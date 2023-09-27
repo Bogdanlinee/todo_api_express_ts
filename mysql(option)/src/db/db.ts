@@ -1,4 +1,3 @@
-
 import mysql, { Connection } from 'mysql';
 
 export let db: Connection;

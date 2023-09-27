@@ -1,7 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import morgan from 'morgan';
-import { connect, db } from './db/db';
+import { connect } from './db/db';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -12,8 +13,10 @@ const port = 5000;
 import tasksRouter from './routes/tasksRoutes';
 import authRouter from './routes/authRoutes';
 
+app.use(cors({ origin: 'localhost:8080/' }))
 app.use(morgan('tiny'));
-app.use(express.static('public'));
+// serving static on another port
+// app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
 

@@ -16,7 +16,7 @@ const selectAllQuery = () => __awaiter(void 0, void 0, void 0, function* () {
         const query = 'SELECT * FROM tasks';
         db_1.db.query(query, (err, result) => {
             if (err) {
-                throw new Error('Something wrong with database');
+                reject('Something wrong with database');
             }
             let data = JSON.parse(JSON.stringify(result));
             data = data.map((item) => {
@@ -34,7 +34,7 @@ const insertOneQuery = (text, checked) => __awaiter(void 0, void 0, void 0, func
         const query = "INSERT INTO `tasksDatabse`.`tasks` (`text`,`checked`) VALUES ('" + text + "','" + checkedValue + "');";
         db_1.db.query(query, (err, result) => {
             if (err) {
-                throw new Error('Something wrong with database');
+                reject('Something wrong with database');
             }
             resolve(result.insertId);
         });
@@ -47,7 +47,7 @@ const updateOneQuery = (text, id, checked) => __awaiter(void 0, void 0, void 0, 
         const query = "UPDATE `tasksDatabse`.`tasks` SET text = '" + text + "', checked = '" + checkedValue + "'  WHERE id = '" + id + "'";
         db_1.db.query(query, (err, result) => {
             if (err) {
-                throw new Error('Something wrong with database');
+                reject('Something wrong with database');
             }
             resolve(true);
         });
@@ -59,7 +59,7 @@ const deleteOneQuery = (id) => __awaiter(void 0, void 0, void 0, function* () {
         const query = "DELETE FROM `tasksDatabse`.`tasks` WHERE id = '" + id + "'";
         db_1.db.query(query, (err, result) => {
             if (err) {
-                throw new Error('Something wrong with database');
+                reject('Something wrong with database');
             }
             resolve(true);
         });

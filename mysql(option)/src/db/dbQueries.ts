@@ -7,7 +7,7 @@ const selectAllQuery = async () => {
     const query = 'SELECT * FROM tasks';
     db.query(query, (err: MysqlError, result?: any) => {
       if (err) {
-        throw new Error('Something wrong with database');
+        reject('Something wrong with database');
       }
       let data = JSON.parse(JSON.stringify(result));
       data = data.map((item: TaskInterface) => {
@@ -26,7 +26,7 @@ const insertOneQuery = async (text: string, checked: boolean) => {
     const query = "INSERT INTO `tasksDatabse`.`tasks` (`text`,`checked`) VALUES ('" + text + "','" + checkedValue + "');";
     db.query(query, (err, result) => {
       if (err) {
-        throw new Error('Something wrong with database');
+        reject('Something wrong with database');
       }
       resolve(result.insertId);
     });
@@ -40,7 +40,7 @@ const updateOneQuery = async (text: string, id: number, checked: boolean) => {
     const query = "UPDATE `tasksDatabse`.`tasks` SET text = '" + text + "', checked = '" + checkedValue + "'  WHERE id = '" + id + "'";
     db.query(query, (err, result) => {
       if (err) {
-        throw new Error('Something wrong with database');
+        reject('Something wrong with database');
       }
       resolve(true);
     });
@@ -52,7 +52,7 @@ const deleteOneQuery = async (id: number) => {
     const query = "DELETE FROM `tasksDatabse`.`tasks` WHERE id = '" + id + "'";
     db.query(query, (err, result) => {
       if (err) {
-        throw new Error('Something wrong with database');
+        reject('Something wrong with database');
       }
       resolve(true);
     });
